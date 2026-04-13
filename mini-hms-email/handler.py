@@ -1,9 +1,15 @@
+import os
 import json
 import smtplib
 from email.message import EmailMessage
+from dotenv import load_dotenv
+
+# Load variables from the .env file
+load_dotenv()
 
 def send_notification(event, context):
     try:
+        # 1. Parse the incoming data
         body = json.loads(event.get('body', '{}'))
         action = body.get('action') 
         recipient = body.get('email')
@@ -11,11 +17,11 @@ def send_notification(event, context):
         if not recipient or not action:
             return {"statusCode": 400, "body": json.dumps({"error": "Missing email/action"})}
 
+        # 2. Build the Email Message
         msg = EmailMessage()
         msg['To'] = recipient
         msg['From'] = "albinsamthomas13@gmail.com"
 
-        # Content based on the "Actions" required by your PDF
         if action == "SIGNUP_WELCOME":
             msg['Subject'] = "Welcome to Mini-HMS!"
             username = body.get('username', 'User')
@@ -30,10 +36,13 @@ def send_notification(event, context):
         else:
             return {"statusCode": 400, "body": json.dumps({"error": "Unknown Action"})}
 
-        # SENDING THE EMAIL
-        # IMPORTANT: Use a Google App Password, NOT your regular password
+        # 3. SEND THE EMAIL using the environment variable
+        # We use os.getenv to pull the password safely from .env
+        gmail_user = "albinsamthomas13@gmail.com"
+        gmail_password = os.getenv('EMAIL_PASSWORD')
+
         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
-            smtp.login('albinsamthomas13@gmail.com', 'dchh jrij nnpv ggmj')
+            smtp.login(gmail_user, gmail_password)
             smtp.send_message(msg)
 
         print(f"Email Sent: {action} to {recipient}")

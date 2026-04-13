@@ -10,6 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+import os # Add this at the top
+from dotenv import load_dotenv
+
+load_dotenv() # This loads the variables from .env
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-4hq@w7)l3js@p+r@axj7drh#o^@a%jddn-i*h(s1e35yqdpc8w'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -77,7 +81,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'mini_hms',
-        'USER': 'postgres',
+        'USER': os.getenv('DB_PASSWORD'),
         'PASSWORD': '1234',
         'HOST': '127.0.0.1',
         'PORT': '5433',
