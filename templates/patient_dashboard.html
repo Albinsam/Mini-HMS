@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Patient Dashboard</h2>
+<p>Select an available slot to book your appointment.</p>
+<hr>
+<div class="row">
+    {% for slot in available_slots %}
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Dr. {{ slot.doctor.username }}</h5>
+                <p class="card-text text-muted">{{ slot.start_time|date:"F j, Y" }}</p>
+                <p class="card-text"><strong>Time:</strong> {{ slot.start_time|date:"H:i" }}</p>
+                <form action="{% url 'book_appointment' slot.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary w-100">Book Appointment</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p>No available slots at the moment. Please check back later.</p>
+    {% endfor %}
+</div>
+{% endblock %}

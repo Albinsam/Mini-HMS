@@ -1,0 +1,20 @@
+org: minihms12
+app: my-app  # You can name this
+service: hms-email-service
+
+provider:
+  name: aws
+  runtime: python3.9
+  region: us-east-1  # You can change this to your preferred region
+
+functions:
+  sendNotification:
+    handler: handler.send_notification # This matches the function name above
+    timeout: 30  # Add this line to give it 30 seconds
+    events:
+      - http:
+          path: notify
+          method: post
+          cors: true
+plugins:
+  - serverless-offline

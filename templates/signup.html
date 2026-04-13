@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-primary alert-dismissible fade show border-0 shadow-sm" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white py-3">
+                    <h4 class="mb-0 text-center">User Registration</h4>
+                </div>
+                
+                <div class="card-body p-4">
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        
+                        <div class="mb-4">
+                            <label class="fw-bold d-block mb-2">Register as:</label>
+                            <div class="ps-1">
+                                {{ form.role }}
+                            </div>
+                        </div>
+
+                        {% for field in form %}
+                            {% if field.name != 'role' %}
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold small">{{ field.label }}</label>
+                                    {{ field }}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+
+                        <button type="submit" class="btn btn-primary w-100 mt-3 py-2 fw-bold">
+                            SIGN UP
+                        </button>
+                    </form>
+                    
+                    <div class="text-center mt-4">
+                        <p class="mb-0">Already have an account? <a href="{% url 'login' %}" class="text-primary text-decoration-none fw-bold">Login</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Standard Blue Accents */
+    .bg-primary { background-color: #007bff !important; }
+    .text-primary { color: #007bff !important; }
+    .btn-primary { background-color: #007bff; border: none; }
+    .btn-primary:hover { background-color: #0056b3; }
+
+    /* Fix Radio Button Layout */
+    ul#id_role {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        display: flex;
+        gap: 20px;
+    }
+    ul#id_role li {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    /* Input Box Formatting */
+    input[type="text"], 
+    input[type="email"], 
+    input[type="password"] {
+        display: block;
+        width: 100%;
+        padding: 10px 12px;
+        color: #495057;
+        background-color: #fff;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+    }
+
+    input:focus {
+        border-color: #80bdff;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+</style>
+{% endblock %}
