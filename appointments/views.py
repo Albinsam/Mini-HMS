@@ -14,10 +14,14 @@ import pytz
 SERVERLESS_URL = "http://localhost:3000/dev/notify"
 
 def home_redirect(request):
-    if request.user.is_doctor:
-        return redirect('doctor_dashboard')
-    elif request.user.is_patient:
-        return redirect('patient_dashboard')
+    # Check if the user is actually logged in first
+    if request.user.is_authenticated:
+        if request.user.is_doctor:
+            return redirect('doctor_dashboard')
+        else:
+            return redirect('patient_dashboard')
+    
+    # If the user is NOT logged in, send them to the login page
     return redirect('login')  
 
 @login_required
